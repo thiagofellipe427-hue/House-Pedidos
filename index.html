@@ -21,8 +21,6 @@ body{
   padding-bottom:40px;
 }
 
-/* TOPO */
-
 header{
   background:#111;
   color:#fff;
@@ -42,16 +40,12 @@ header{
   opacity:.85;
 }
 
-/* CONTAINER */
-
 .container{
   width:100%;
   max-width:700px;
   margin:auto;
   padding:15px;
 }
-
-/* CATEGORIAS */
 
 .categorias{
   display:flex;
@@ -79,8 +73,6 @@ header{
   background:#111;
   color:#fff;
 }
-
-/* PRODUTOS */
 
 .produto{
   background:#fff;
@@ -126,8 +118,6 @@ header{
   font-weight:bold;
   cursor:pointer;
 }
-
-/* CARRINHO */
 
 .carrinho{
   margin-top:20px;
@@ -200,8 +190,6 @@ header{
   margin-left:3px;
 }
 
-/* RESUMO */
-
 .resumo{
   margin-top:16px;
   padding-top:10px;
@@ -233,8 +221,6 @@ header{
   cursor:pointer;
 }
 
-/* FORMULÁRIO */
-
 .formulario{
   background:#fff;
   margin-top:20px;
@@ -252,6 +238,10 @@ label{
   margin-top:14px;
   margin-bottom:6px;
   font-weight:bold;
+}
+
+.obrigatorio{
+  color:#d60000;
 }
 
 input,
@@ -293,8 +283,6 @@ textarea:focus{
   cursor:pointer;
 }
 
-/* RODAPÉ */
-
 footer{
   text-align:center;
   margin-top:30px;
@@ -322,8 +310,6 @@ footer{
 
 <div class="container">
 
-  <!-- CATEGORIAS -->
-
   <div class="categorias">
 
     <button
@@ -345,12 +331,8 @@ footer{
   </div>
 
 
-  <!-- PRODUTOS -->
-
   <div id="produtos"></div>
 
-
-  <!-- CARRINHO -->
 
   <div class="carrinho">
 
@@ -362,14 +344,11 @@ footer{
       Seu carrinho está vazio.
     </div>
 
-
     <div class="resumo">
 
       <div class="linha">
 
-        <span>
-          Produtos:
-        </span>
+        <span>Produtos:</span>
 
         <strong id="subtotal">
           R$ 0,00
@@ -396,9 +375,7 @@ footer{
 
       <div class="linha total">
 
-        <span>
-          Total:
-        </span>
+        <span>Total:</span>
 
         <strong id="total">
           R$ 0,00
@@ -420,8 +397,6 @@ footer{
   </div>
 
 
-  <!-- FORMULÁRIO -->
-
   <div
     class="formulario"
     id="formulario"
@@ -433,13 +408,28 @@ footer{
 
 
     <label>
-      Seu nome
+      Seu nome <span class="obrigatorio">*</span>
     </label>
 
     <input
       type="text"
       id="nome"
-      placeholder="Digite seu nome">
+      placeholder="Digite seu nome"
+      required>
+
+
+    <label>
+      📱 Número de telefone
+      <span class="obrigatorio">*</span>
+    </label>
+
+    <input
+      type="tel"
+      id="telefone"
+      placeholder="(62) 99999-9999"
+      inputmode="numeric"
+      maxlength="15"
+      required>
 
 
     <label>
@@ -465,6 +455,7 @@ footer{
 
       <label>
         Endereço de entrega
+        <span class="obrigatorio">*</span>
       </label>
 
       <input
@@ -525,13 +516,12 @@ footer{
 
 <script>
 
+
 /* ==========================
    CONFIGURAÇÕES
 ========================== */
 
 const WHATSAPP = "5562981339087";
-
-/* TAXA DE ENTREGA */
 
 const TAXA_ENTREGA = 5.00;
 
@@ -1184,6 +1174,59 @@ function mostrarFormulario(){
 
 
 /* ==========================
+   MÁSCARA DO TELEFONE
+========================== */
+
+document
+  .getElementById("telefone")
+  .addEventListener("input", function(){
+
+    let valor =
+      this.value.replace(/\D/g,"");
+
+
+    if(valor.length > 11){
+      valor = valor.substring(0,11);
+    }
+
+
+    if(valor.length <= 10){
+
+      valor =
+        valor.replace(
+          /^(\d{2})(\d)/,
+          "($1) $2"
+        );
+
+      valor =
+        valor.replace(
+          /(\d{4})(\d)/,
+          "$1-$2"
+        );
+
+    }else{
+
+      valor =
+        valor.replace(
+          /^(\d{2})(\d)/,
+          "($1) $2"
+        );
+
+      valor =
+        valor.replace(
+          /(\d{5})(\d)/,
+          "$1-$2"
+        );
+
+    }
+
+
+    this.value = valor;
+
+  });
+
+
+/* ==========================
    ENVIAR WHATSAPP
 ========================== */
 
@@ -1203,6 +1246,12 @@ function enviarWhatsApp(){
   const nome =
     document.getElementById(
       "nome"
+    ).value.trim();
+
+
+  const telefone =
+    document.getElementById(
+      "telefone"
     ).value.trim();
 
 
@@ -1236,6 +1285,34 @@ function enviarWhatsApp(){
       "Digite seu nome."
     );
 
+    document.getElementById(
+      "nome"
+    ).focus();
+
+    return;
+
+  }
+
+
+  /* TELEFONE OBRIGATÓRIO */
+
+  const numerosTelefone =
+    telefone.replace(/\D/g,"");
+
+
+  if(
+    !telefone ||
+    numerosTelefone.length < 10
+  ){
+
+    alert(
+      "Digite um número de telefone válido."
+    );
+
+    document.getElementById(
+      "telefone"
+    ).focus();
+
     return;
 
   }
@@ -1249,6 +1326,10 @@ function enviarWhatsApp(){
     alert(
       "Digite o endereço de entrega."
     );
+
+    document.getElementById(
+      "endereco"
+    ).focus();
 
     return;
 
@@ -1276,6 +1357,12 @@ function enviarWhatsApp(){
   mensagem +=
     "👤 *Cliente:* " +
     nome +
+    "\\n";
+
+
+  mensagem +=
+    "📱 *Telefone:* " +
+    telefone +
     "\\n";
 
 
@@ -1354,6 +1441,8 @@ function enviarWhatsApp(){
       .toFixed(2)
       .replace(".",",");
 
+
+  /* OBSERVAÇÃO */
 
   if(observacao){
 
