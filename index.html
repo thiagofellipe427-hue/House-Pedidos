@@ -62,11 +62,6 @@ h2 {
   cursor: pointer;
 }
 
-.categoria:hover {
-  background: #111;
-  color: white;
-}
-
 .produto {
   background: white;
   border-radius: 15px;
@@ -99,7 +94,6 @@ button.adicionar {
   padding: 12px;
   border-radius: 8px;
   font-weight: bold;
-  cursor: pointer;
 }
 
 .carrinho {
@@ -110,9 +104,7 @@ button.adicionar {
 }
 
 .item-carrinho {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
+  padding: 10px 0;
   border-bottom: 1px solid #ddd;
 }
 
@@ -132,7 +124,36 @@ button.adicionar {
   margin-top: 15px;
   font-size: 17px;
   font-weight: bold;
-  cursor: pointer;
+}
+
+.formulario {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  margin-top: 25px;
+}
+
+.formulario input,
+.formulario select,
+.formulario textarea {
+  width: 100%;
+  padding: 13px;
+  margin: 8px 0 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.enviar {
+  width: 100%;
+  background: #25D366;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: bold;
+  margin-top: 10px;
 }
 </style>
 </head>
@@ -149,9 +170,17 @@ button.adicionar {
   <h2>Escolha uma categoria</h2>
 
   <div class="categorias">
-    <button class="categoria" onclick="mostrar('pasteis')">🥟 Pastéis</button>
-    <button class="categoria" onclick="mostrar('acai')">🍧 Açaí</button>
-    <button class="categoria" onclick="mostrar('bebidas')">🍺 Bebidas</button>
+    <button class="categoria" onclick="mostrar('pasteis')">
+      🥟 Pastéis
+    </button>
+
+    <button class="categoria" onclick="mostrar('acai')">
+      🍧 Açaí
+    </button>
+
+    <button class="categoria" onclick="mostrar('bebidas')">
+      🍺 Bebidas
+    </button>
   </div>
 
   <div id="produtos"></div>
@@ -168,8 +197,52 @@ button.adicionar {
       Total: R$ <span id="total">0,00</span>
     </div>
 
-    <button class="finalizar" onclick="finalizarPedido()">
+    <button class="finalizar" onclick="abrirFormulario()">
       📲 Finalizar pedido
+    </button>
+
+  </div>
+
+  <div class="formulario" id="formulario" style="display:none;">
+
+    <h2>📝 Seus dados</h2>
+
+    <label>Nome</label>
+    <input
+      type="text"
+      id="nome"
+      placeholder="Digite seu nome"
+    >
+
+    <label>Tipo do pedido</label>
+
+    <select id="tipoPedido" onchange="mostrarEndereco()">
+      <option value="retirada">Retirar no estabelecimento</option>
+      <option value="entrega">Entrega</option>
+    </select>
+
+    <div id="campoEndereco" style="display:none;">
+
+      <label>Endereço</label>
+
+      <textarea
+        id="endereco"
+        rows="3"
+        placeholder="Rua, número, bairro e complemento"
+      ></textarea>
+
+    </div>
+
+    <label>Forma de pagamento</label>
+
+    <select id="pagamento">
+      <option value="Pix">Pix</option>
+      <option value="Dinheiro">Dinheiro</option>
+      <option value="Cartão">Cartão</option>
+    </select>
+
+    <button class="enviar" onclick="enviarWhatsApp()">
+      📲 Enviar pedido pelo WhatsApp
     </button>
 
   </div>
@@ -178,133 +251,184 @@ button.adicionar {
 
 <script>
 
+/* =================================================
+   NÚMERO DO WHATSAPP DA HOUSE
+   Para trocar futuramente, altere somente este número.
+   ================================================= */
+
+const WHATSAPP = "5562981339087";
+
+
 let carrinho = [];
 let total = 0;
+
 
 const produtos = {
 
 pasteis: [
+
   {
     nome: "Pastel de Carne",
     preco: 13
   },
+
   {
     nome: "Pastel de Carne com Queijo",
     preco: 13
   },
+
   {
     nome: "Pastel de Queijo",
     preco: 13
   },
+
   {
     nome: "Pastel de Presunto e Queijo",
     preco: 13
   },
+
   {
     nome: "Pastel de Frango com Queijo",
     preco: 13
   },
+
   {
     nome: "Pastel de Calabresa com Queijo",
     preco: 13
   },
+
   {
     nome: "Pastel de Pizza",
     preco: 13
   },
+
   {
     nome: "Pastel Especial de Carne, Queijo, Milho e Bacon",
     preco: 16
   },
+
   {
     nome: "Pastel Especial de Frango, Queijo, Milho e Catupiry",
     preco: 16
   },
+
   {
     nome: "Pastel Especial de Calabresa, Queijo, Cebola e Bacon",
     preco: 16
   },
+
   {
     nome: "Pastel Especial de Frango com Catupiry e Bacon",
     preco: 16
   }
+
 ],
 
 acai: [
+
   {
     nome: "House Açaí Clássico 300 ml",
     preco: 0
   },
+
   {
     nome: "House Açaí Clássico 500 ml",
     preco: 0
   },
+
   {
     nome: "House Açaí Clássico 700 ml",
     preco: 0
   },
+
   {
     nome: "House Açaí com Creme de Ninho 300 ml",
     preco: 0
   },
+
   {
     nome: "House Açaí com Creme de Ninho 500 ml",
     preco: 0
   },
+
   {
     nome: "House Açaí com Creme de Ninho 700 ml",
     preco: 0
   }
+
 ],
 
 bebidas: [
+
   {
     nome: "Coca-Cola 1,5 L",
     preco: 0
   },
+
   {
     nome: "Coca-Cola 2 L",
     preco: 0
   },
+
   {
     nome: "Guaraná 1,5 L",
     preco: 0
   },
+
   {
     nome: "Guaraná 2 L",
     preco: 0
   },
+
   {
     nome: "Heineken",
     preco: 0
   },
+
   {
     nome: "Amstel",
     preco: 0
   },
+
   {
-    nome: "Brahma",
+    nome: "Brahma 269 ml",
     preco: 0
   },
+
+  {
+    nome: "Brahma 350 ml",
+    preco: 0
+  },
+
   {
     nome: "Bavária",
     preco: 0
   },
+
   {
     nome: "Sol",
     preco: 0
   },
+
   {
-    nome: "Antarctica Original",
+    nome: "Antarctica Original 269 ml",
     preco: 0
   },
+
+  {
+    nome: "Antarctica Original 350 ml",
+    preco: 0
+  },
+
   {
     nome: "Suco de Laranja Natural",
     preco: 0
   }
+
 ]
 
 };
+
 
 function mostrar(categoria) {
 
@@ -312,7 +436,7 @@ function mostrar(categoria) {
 
   area.innerHTML = "";
 
-  produtos[categoria].forEach((produto, index) => {
+  produtos[categoria].forEach((produto) => {
 
     let precoTexto =
       produto.preco > 0
@@ -320,25 +444,33 @@ function mostrar(categoria) {
       : "Preço a definir";
 
     area.innerHTML += `
+
       <div class="produto">
 
         <h3>${produto.nome}</h3>
 
         <p>Escolha este produto para adicionar ao pedido.</p>
 
-        <div class="preco">${precoTexto}</div>
+        <div class="preco">
+          ${precoTexto}
+        </div>
 
-        <button class="adicionar"
+        <button
+          class="adicionar"
           onclick="adicionar('${produto.nome}', ${produto.preco})">
+
           + Adicionar ao pedido
+
         </button>
 
       </div>
+
     `;
 
   });
 
 }
+
 
 function adicionar(nome, preco) {
 
@@ -351,6 +483,7 @@ function adicionar(nome, preco) {
 
 }
 
+
 function atualizarCarrinho() {
 
   const area = document.getElementById("carrinho");
@@ -359,21 +492,31 @@ function atualizarCarrinho() {
 
   total = 0;
 
-  carrinho.forEach(item => {
+  carrinho.forEach((item) => {
 
     total += item.preco;
 
     area.innerHTML += `
+
       <div class="item-carrinho">
-        <span>${item.nome}</span>
-        <strong>R$ ${item.preco.toFixed(2).replace(".", ",")}</strong>
+
+        <strong>${item.nome}</strong>
+
+        <br>
+
+        R$ ${item.preco.toFixed(2).replace(".", ",")}
+
       </div>
+
     `;
 
   });
 
   if (carrinho.length === 0) {
-    area.innerHTML = "<p>Nenhum produto adicionado.</p>";
+
+    area.innerHTML =
+      "<p>Nenhum produto adicionado.</p>";
+
   }
 
   document.getElementById("total").innerText =
@@ -381,16 +524,141 @@ function atualizarCarrinho() {
 
 }
 
-function finalizarPedido() {
+
+function abrirFormulario() {
 
   if (carrinho.length === 0) {
+
     alert("Adicione algum produto ao pedido.");
+
     return;
   }
 
-  alert("Seu pedido foi montado! Em breve vamos configurar o envio pelo WhatsApp.");
+  document.getElementById("formulario").style.display = "block";
+
+  document.getElementById("formulario")
+    .scrollIntoView({
+      behavior: "smooth"
+    });
 
 }
+
+
+function mostrarEndereco() {
+
+  const tipo =
+    document.getElementById("tipoPedido").value;
+
+  const campo =
+    document.getElementById("campoEndereco");
+
+  if (tipo === "entrega") {
+
+    campo.style.display = "block";
+
+  } else {
+
+    campo.style.display = "none";
+
+  }
+
+}
+
+
+function enviarWhatsApp() {
+
+  const nome =
+    document.getElementById("nome").value.trim();
+
+  const tipo =
+    document.getElementById("tipoPedido").value;
+
+  const pagamento =
+    document.getElementById("pagamento").value;
+
+  const endereco =
+    document.getElementById("endereco").value.trim();
+
+
+  if (!nome) {
+
+    alert("Digite seu nome.");
+
+    return;
+
+  }
+
+
+  if (tipo === "entrega" && !endereco) {
+
+    alert("Digite o endereço para entrega.");
+
+    return;
+
+  }
+
+
+  let mensagem =
+    "🏠 *NOVO PEDIDO - HOUSE*%0A%0A";
+
+  mensagem +=
+    "👤 *Cliente:* " + nome + "%0A";
+
+
+  if (tipo === "entrega") {
+
+    mensagem +=
+      "🚚 *Entrega*%0A";
+
+    mensagem +=
+      "📍 *Endereço:* " + endereco + "%0A";
+
+  } else {
+
+    mensagem +=
+      "🏪 *Retirada no estabelecimento*%0A";
+
+  }
+
+
+  mensagem +=
+    "💳 *Pagamento:* " + pagamento + "%0A%0A";
+
+
+  mensagem +=
+    "🛒 *ITENS DO PEDIDO:*%0A";
+
+
+  carrinho.forEach((item, index) => {
+
+    mensagem +=
+      (index + 1) +
+      ". " +
+      item.nome +
+      " - R$ " +
+      item.preco.toFixed(2).replace(".", ",") +
+      "%0A";
+
+  });
+
+
+  mensagem +=
+    "%0A💰 *TOTAL: R$ " +
+    total.toFixed(2).replace(".", ",") +
+    "*";
+
+
+  const url =
+    "https://wa.me/" +
+    WHATSAPP +
+    "?text=" +
+    mensagem;
+
+
+  window.open(url, "_blank");
+
+}
+
 
 mostrar("pasteis");
 
