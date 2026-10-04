@@ -1,939 +1,1396 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>House - Pedidos</title>
+<title>HOUSE - Pedidos</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+<style>
 
-    body {
-      background: #f5f5f5;
-      color: #222;
-      padding-bottom: 40px;
-    }
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,Helvetica,sans-serif;
+}
 
-    header {
-      background: #111;
-      color: white;
-      padding: 25px 15px;
-      text-align: center;
-    }
+body{
+  background:#f4f4f4;
+  color:#222;
+  padding-bottom:40px;
+}
 
-    header h1 {
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
+/* TOPO */
 
-    header p {
-      font-size: 15px;
-    }
+header{
+  background:#111;
+  color:#fff;
+  padding:28px 18px;
+  text-align:center;
+}
 
-    .container {
-      max-width: 700px;
-      margin: auto;
-      padding: 15px;
-    }
+.logo{
+  font-size:38px;
+  font-weight:900;
+  letter-spacing:3px;
+}
 
-    .categorias {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      margin: 15px 0;
-    }
+.slogan{
+  margin-top:7px;
+  font-size:14px;
+  opacity:.85;
+}
 
-    .categorias button {
-      border: none;
-      background: #ddd;
-      padding: 12px 18px;
-      border-radius: 25px;
-      cursor: pointer;
-      white-space: nowrap;
-      font-weight: bold;
-    }
+/* CONTAINER */
 
-    .categorias button.ativo {
-      background: #111;
-      color: white;
-    }
+.container{
+  width:100%;
+  max-width:700px;
+  margin:auto;
+  padding:15px;
+}
 
-    .produto {
-      background: white;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
+/* CATEGORIAS */
 
-    .produto h3 {
-      margin-bottom: 7px;
-    }
+.categorias{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:5px 0 12px;
+}
 
-    .produto p {
-      color: #666;
-      margin-bottom: 10px;
-    }
+.categorias::-webkit-scrollbar{
+  display:none;
+}
 
-    .produto button {
-      width: 100%;
-      padding: 11px;
-      border: none;
-      background: #111;
-      color: white;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.categorias button{
+  border:0;
+  background:#ddd;
+  color:#222;
+  padding:12px 18px;
+  border-radius:25px;
+  font-weight:bold;
+  white-space:nowrap;
+  cursor:pointer;
+}
 
-    .carrinho {
-      background: white;
-      margin-top: 20px;
-      padding: 18px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
+.categorias button.ativo{
+  background:#111;
+  color:#fff;
+}
 
-    .item-carrinho {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      border-bottom: 1px solid #eee;
-      padding: 12px 0;
-    }
+/* PRODUTOS */
 
-    .item-info {
-      flex: 1;
-    }
+.produto{
+  background:#fff;
+  border-radius:16px;
+  margin-bottom:14px;
+  overflow:hidden;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
 
-    .item-info strong {
-      display: block;
-      margin-bottom: 4px;
-    }
+.foto-produto{
+  height:170px;
+  background:#e9e9e9;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:50px;
+  color:#999;
+}
 
-    .controles {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+.info-produto{
+  padding:16px;
+}
 
-    .controles button {
-      width: 30px;
-      height: 30px;
-      border: none;
-      border-radius: 6px;
-      background: #111;
-      color: white;
-      font-size: 18px;
-      cursor: pointer;
-    }
+.info-produto h3{
+  font-size:17px;
+  margin-bottom:7px;
+}
 
-    .quantidade {
-      min-width: 22px;
-      text-align: center;
-      font-weight: bold;
-    }
+.preco{
+  font-weight:bold;
+  font-size:17px;
+  margin-bottom:13px;
+}
 
-    .remover {
-      background: #d60000 !important;
-    }
+.botao-adicionar{
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:10px;
+  background:#111;
+  color:#fff;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    .resumo {
-      margin-top: 15px;
-      border-top: 1px solid #ddd;
-      padding-top: 15px;
-    }
+/* CARRINHO */
 
-    .linha {
-      display: flex;
-      justify-content: space-between;
-      margin: 8px 0;
-    }
+.carrinho{
+  margin-top:20px;
+  background:#fff;
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
 
-    .total {
-      font-size: 21px;
-      font-weight: bold;
-      margin-top: 12px;
-    }
+.titulo-carrinho{
+  font-size:22px;
+  margin-bottom:12px;
+}
 
-    .finalizar {
-      width: 100%;
-      margin-top: 18px;
-      padding: 15px;
-      border: none;
-      border-radius: 10px;
-      background: #25D366;
-      color: white;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.vazio{
+  color:#777;
+  text-align:center;
+  padding:12px 0;
+}
 
-    .formulario {
-      background: white;
-      margin-top: 20px;
-      padding: 18px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
+.item-carrinho{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:13px 0;
+  border-bottom:1px solid #eee;
+}
 
-    .formulario h2 {
-      margin-bottom: 15px;
-    }
+.item-info{
+  flex:1;
+}
 
-    .formulario label {
-      display: block;
-      margin-top: 12px;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
+.item-info strong{
+  display:block;
+  font-size:14px;
+  margin-bottom:5px;
+}
 
-    .formulario input,
-    .formulario select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-    }
+.item-preco{
+  font-size:14px;
+  color:#555;
+}
 
-    #campoEndereco {
-      display: none;
-    }
+.controles{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
 
-    .enviar {
-      width: 100%;
-      margin-top: 20px;
-      padding: 15px;
-      border: none;
-      border-radius: 10px;
-      background: #25D366;
-      color: white;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.controles button{
+  width:30px;
+  height:30px;
+  border:0;
+  border-radius:7px;
+  background:#111;
+  color:#fff;
+  font-size:18px;
+  cursor:pointer;
+}
 
-    .vazio {
-      text-align: center;
-      color: #777;
-      padding: 10px;
-    }
-  </style>
+.quantidade{
+  min-width:22px;
+  text-align:center;
+  font-weight:bold;
+}
+
+.controles .remover{
+  background:#d60000;
+  font-size:14px;
+  margin-left:3px;
+}
+
+/* RESUMO */
+
+.resumo{
+  margin-top:16px;
+  padding-top:10px;
+  border-top:1px solid #ddd;
+}
+
+.linha{
+  display:flex;
+  justify-content:space-between;
+  margin:8px 0;
+}
+
+.total{
+  font-size:22px;
+  font-weight:bold;
+  padding-top:8px;
+}
+
+.finalizar{
+  width:100%;
+  margin-top:18px;
+  padding:16px;
+  border:0;
+  border-radius:11px;
+  background:#25D366;
+  color:#fff;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* FORMULÁRIO */
+
+.formulario{
+  background:#fff;
+  margin-top:20px;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.formulario h2{
+  margin-bottom:15px;
+}
+
+label{
+  display:block;
+  margin-top:14px;
+  margin-bottom:6px;
+  font-weight:bold;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  padding:13px;
+  border:1px solid #ccc;
+  border-radius:9px;
+  font-size:15px;
+  outline:none;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#111;
+}
+
+#campoEndereco{
+  display:none;
+}
+
+.enviar{
+  width:100%;
+  margin-top:20px;
+  padding:16px;
+  border:0;
+  border-radius:11px;
+  background:#25D366;
+  color:#fff;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* RODAPÉ */
+
+footer{
+  text-align:center;
+  margin-top:30px;
+  color:#777;
+  font-size:13px;
+}
+
+</style>
 </head>
 
 <body>
 
 <header>
-  <h1>HOUSE</h1>
-  <p>Faça seu pedido pelo WhatsApp</p>
+
+  <div class="logo">
+    HOUSE
+  </div>
+
+  <div class="slogan">
+    Faça seu pedido pelo WhatsApp
+  </div>
+
 </header>
+
 
 <div class="container">
 
+  <!-- CATEGORIAS -->
+
   <div class="categorias">
-    <button class="ativo" onclick="mostrarCategoria('pasteis', this)">
+
+    <button
+      class="ativo"
+      onclick="mostrarCategoria('pasteis', this)">
       🥟 Pastéis
     </button>
 
-    <button onclick="mostrarCategoria('acai', this)">
+    <button
+      onclick="mostrarCategoria('acai', this)">
       🍇 Açaí
     </button>
 
-    <button onclick="mostrarCategoria('bebidas', this)">
+    <button
+      onclick="mostrarCategoria('bebidas', this)">
       🥤 Bebidas
     </button>
+
   </div>
+
+
+  <!-- PRODUTOS -->
 
   <div id="produtos"></div>
 
+
+  <!-- CARRINHO -->
+
   <div class="carrinho">
-    <h2>🛒 Seu pedido</h2>
+
+    <h2 class="titulo-carrinho">
+      🛒 Seu pedido
+    </h2>
 
     <div id="itensCarrinho" class="vazio">
       Seu carrinho está vazio.
     </div>
 
+
     <div class="resumo">
+
       <div class="linha">
-        <span>Produtos:</span>
-        <strong id="subtotal">R$ 0,00</strong>
+
+        <span>
+          Produtos:
+        </span>
+
+        <strong id="subtotal">
+          R$ 0,00
+        </strong>
+
       </div>
 
-      <div class="linha" id="linhaTaxa" style="display:none;">
-        <span>Taxa de entrega:</span>
-        <strong id="taxaEntrega">R$ 0,00</strong>
+
+      <div
+        class="linha"
+        id="linhaTaxa"
+        style="display:none;">
+
+        <span>
+          🛵 Taxa de entrega:
+        </span>
+
+        <strong id="taxaEntrega">
+          R$ 0,00
+        </strong>
+
       </div>
+
 
       <div class="linha total">
-        <span>Total:</span>
-        <strong id="total">R$ 0,00</strong>
+
+        <span>
+          Total:
+        </span>
+
+        <strong id="total">
+          R$ 0,00
+        </strong>
+
       </div>
+
     </div>
 
-    <button class="finalizar" onclick="mostrarFormulario()">
+
+    <button
+      class="finalizar"
+      onclick="mostrarFormulario()">
+
       Finalizar pedido
+
     </button>
+
   </div>
 
-  <div class="formulario" id="formulario" style="display:none;">
 
-    <h2>📋 Dados do pedido</h2>
+  <!-- FORMULÁRIO -->
 
-    <label>Seu nome</label>
-    <input type="text" id="nome" placeholder="Digite seu nome">
+  <div
+    class="formulario"
+    id="formulario"
+    style="display:none;">
 
-    <label>Tipo do pedido</label>
-    <select id="tipoPedido" onchange="alterarTipoPedido()">
-      <option value="retirada">Retirar no estabelecimento</option>
-      <option value="entrega">Entrega</option>
+    <h2>
+      📋 Dados do pedido
+    </h2>
+
+
+    <label>
+      Seu nome
+    </label>
+
+    <input
+      type="text"
+      id="nome"
+      placeholder="Digite seu nome">
+
+
+    <label>
+      Tipo do pedido
+    </label>
+
+    <select
+      id="tipoPedido"
+      onchange="alterarTipoPedido()">
+
+      <option value="retirada">
+        Retirar no estabelecimento
+      </option>
+
+      <option value="entrega">
+        Entrega
+      </option>
+
     </select>
+
 
     <div id="campoEndereco">
 
-      <label>Endereço de entrega</label>
+      <label>
+        Endereço de entrega
+      </label>
+
       <input
         type="text"
         id="endereco"
-        placeholder="Rua, número, bairro..."
-      >
+        placeholder="Rua, número, bairro...">
 
     </div>
 
-    <label>Forma de pagamento</label>
+
+    <label>
+      Forma de pagamento
+    </label>
+
     <select id="pagamento">
-      <option value="Pix">Pix</option>
-      <option value="Dinheiro">Dinheiro</option>
-      <option value="Cartão">Cartão</option>
+
+      <option value="Pix">
+        Pix
+      </option>
+
+      <option value="Dinheiro">
+        Dinheiro
+      </option>
+
+      <option value="Cartão">
+        Cartão
+      </option>
+
     </select>
 
-    <button class="enviar" onclick="enviarWhatsApp()">
+
+    <label>
+      📝 Observação do pedido
+    </label>
+
+    <textarea
+      id="observacao"
+      placeholder="Ex.: sem cebola, molho extra, algum pedido especial..."></textarea>
+
+
+    <button
+      class="enviar"
+      onclick="enviarWhatsApp()">
+
       📲 Enviar pedido pelo WhatsApp
+
     </button>
 
   </div>
 
+
+  <footer>
+    HOUSE • Pedido rápido pelo WhatsApp
+  </footer>
+
 </div>
+
 
 <script>
 
-  // ==========================
-  // CONFIGURAÇÕES
-  // ==========================
+/* ==========================
+   CONFIGURAÇÕES
+========================== */
 
-  const WHATSAPP = "5562981339087";
+const WHATSAPP = "5562981339087";
 
-  // ALTERE AQUI O VALOR DA TAXA
-  const TAXA_ENTREGA = 5.00;
+/* TAXA DE ENTREGA */
 
-
-  // ==========================
-  // PRODUTOS
-  // ==========================
-
-  const produtos = {
-
-    pasteis: [
-
-      { nome: "Pastel de Carne", preco: 13 },
-
-      { nome: "Pastel de Carne com queijo", preco: 13 },
-
-      { nome: "Pastel de Queijo", preco: 13 },
-
-      { nome: "Pastel de Presunto e queijo", preco: 13 },
-
-      { nome: "Pastel de Frango com queijo", preco: 13 },
-
-      { nome: "Pastel de Calabresa com queijo", preco: 13 },
-
-      { nome: "Pastel de Pizza", preco: 13 },
-
-      {
-        nome: "Pastel Especial - Carne, queijo, milho e bacon",
-        preco: 16
-      },
-
-      {
-        nome: "Pastel Especial - Frango, queijo, milho e catupiry",
-        preco: 16
-      },
-
-      {
-        nome: "Pastel Especial - Calabresa, queijo, cebola e bacon",
-        preco: 16
-      },
-
-      {
-        nome: "Pastel Especial - Frango com catupiry e bacon",
-        preco: 16
-      }
-
-    ],
+const TAXA_ENTREGA = 5.00;
 
 
-    acai: [
+/* ==========================
+   PRODUTOS
+========================== */
 
-      {
-        nome: "House açaí clássico - 300 ml",
-        preco: 0
-      },
+const produtos = {
 
-      {
-        nome: "House açaí clássico - 500 ml",
-        preco: 0
-      },
+  pasteis: [
 
-      {
-        nome: "House açaí clássico - 700 ml",
-        preco: 0
-      },
+    {
+      nome:"Pastel de Carne",
+      preco:13
+    },
 
-      {
-        nome: "House açaí com creme de ninho - 300 ml",
-        preco: 0
-      },
+    {
+      nome:"Pastel de Carne com queijo",
+      preco:13
+    },
 
-      {
-        nome: "House açaí com creme de ninho - 500 ml",
-        preco: 0
-      },
+    {
+      nome:"Pastel de Queijo",
+      preco:13
+    },
 
-      {
-        nome: "House açaí com creme de ninho - 700 ml",
-        preco: 0
-      }
+    {
+      nome:"Pastel de Presunto e queijo",
+      preco:13
+    },
 
-    ],
+    {
+      nome:"Pastel de Frango com queijo",
+      preco:13
+    },
 
+    {
+      nome:"Pastel de Calabresa com queijo",
+      preco:13
+    },
 
-    bebidas: [
+    {
+      nome:"Pastel de Pizza",
+      preco:13
+    },
 
-      {
-        nome: "Heineken",
-        preco: 0
-      },
+    {
+      nome:"Pastel Especial - Carne, queijo, milho e bacon",
+      preco:16
+    },
 
-      {
-        nome: "Amstel",
-        preco: 0
-      },
+    {
+      nome:"Pastel Especial - Frango, queijo, milho e catupiry",
+      preco:16
+    },
 
-      {
-        nome: "Brahma 269 ml",
-        preco: 0
-      },
+    {
+      nome:"Pastel Especial - Calabresa, queijo, cebola e bacon",
+      preco:16
+    },
 
-      {
-        nome: "Brahma 350 ml",
-        preco: 0
-      },
+    {
+      nome:"Pastel Especial - Frango com catupiry e bacon",
+      preco:16
+    }
 
-      {
-        nome: "Bavária",
-        preco: 0
-      },
-
-      {
-        nome: "Sol",
-        preco: 0
-      },
-
-      {
-        nome: "Antarctica Original 269 ml",
-        preco: 0
-      },
-
-      {
-        nome: "Antarctica Original 350 ml",
-        preco: 0
-      },
-
-      {
-        nome: "Coca-Cola 2 L",
-        preco: 0
-      },
-
-      {
-        nome: "Coca-Cola 1,5 L",
-        preco: 0
-      },
-
-      {
-        nome: "Guaraná 2 L",
-        preco: 0
-      },
-
-      {
-        nome: "Guaraná 1,5 L",
-        preco: 0
-      },
-
-      {
-        nome: "Suco de laranja natural",
-        preco: 0
-      }
-
-    ]
-
-  };
+  ],
 
 
-  // ==========================
-  // CARRINHO
-  // ==========================
+  acai: [
 
-  let carrinho = [];
+    {
+      nome:"House açaí clássico - 300 ml",
+      preco:0
+    },
+
+    {
+      nome:"House açaí clássico - 500 ml",
+      preco:0
+    },
+
+    {
+      nome:"House açaí clássico - 700 ml",
+      preco:0
+    },
+
+    {
+      nome:"House açaí com creme de ninho - 300 ml",
+      preco:0
+    },
+
+    {
+      nome:"House açaí com creme de ninho - 500 ml",
+      preco:0
+    },
+
+    {
+      nome:"House açaí com creme de ninho - 700 ml",
+      preco:0
+    }
+
+  ],
 
 
-  function mostrarCategoria(categoria, botao) {
+  bebidas: [
 
-    document
-      .querySelectorAll(".categorias button")
-      .forEach(btn => btn.classList.remove("ativo"));
+    {
+      nome:"Heineken",
+      preco:0
+    },
 
-    botao.classList.add("ativo");
+    {
+      nome:"Amstel",
+      preco:0
+    },
 
-    const lista = document.getElementById("produtos");
+    {
+      nome:"Brahma 269 ml",
+      preco:0
+    },
 
-    lista.innerHTML = "";
+    {
+      nome:"Brahma 350 ml",
+      preco:0
+    },
 
-    produtos[categoria].forEach((produto, index) => {
+    {
+      nome:"Bavária",
+      preco:0
+    },
 
-      const div = document.createElement("div");
+    {
+      nome:"Sol",
+      preco:0
+    },
+
+    {
+      nome:"Antarctica Original 269 ml",
+      preco:0
+    },
+
+    {
+      nome:"Antarctica Original 350 ml",
+      preco:0
+    },
+
+    {
+      nome:"Coca-Cola 2 L",
+      preco:0
+    },
+
+    {
+      nome:"Coca-Cola 1,5 L",
+      preco:0
+    },
+
+    {
+      nome:"Guaraná 2 L",
+      preco:0
+    },
+
+    {
+      nome:"Guaraná 1,5 L",
+      preco:0
+    },
+
+    {
+      nome:"Suco de laranja natural",
+      preco:0
+    }
+
+  ]
+
+};
+
+
+/* ==========================
+   CARRINHO
+========================== */
+
+let carrinho = [];
+
+
+/* ==========================
+   MOSTRAR CATEGORIA
+========================== */
+
+function mostrarCategoria(categoria, botao){
+
+  document
+    .querySelectorAll(".categorias button")
+    .forEach(btn =>
+      btn.classList.remove("ativo")
+    );
+
+  botao.classList.add("ativo");
+
+
+  const lista =
+    document.getElementById("produtos");
+
+  lista.innerHTML = "";
+
+
+  produtos[categoria].forEach(
+    (produto,index) => {
+
+      const div =
+        document.createElement("div");
 
       div.className = "produto";
 
+
+      let precoTexto =
+        produto.preco === 0
+        ? "Preço a definir"
+        : "R$ " +
+          produto.preco
+          .toFixed(2)
+          .replace(".",",");
+
+
+      let emoji = "🍽️";
+
+      if(categoria === "pasteis"){
+        emoji = "🥟";
+      }
+
+      if(categoria === "acai"){
+        emoji = "🍇";
+      }
+
+      if(categoria === "bebidas"){
+        emoji = "🥤";
+      }
+
+
       div.innerHTML = `
-        <h3>${produto.nome}</h3>
 
-        <p>
-          ${
-            produto.preco === 0
-            ? "Preço a definir"
-            : "R$ " + produto.preco.toFixed(2).replace(".", ",")
-          }
-        </p>
+        <div class="foto-produto">
+          ${emoji}
+        </div>
 
-        <button onclick="adicionarProduto('${categoria}', ${index})">
-          ➕ Adicionar ao pedido
-        </button>
+        <div class="info-produto">
+
+          <h3>
+            ${produto.nome}
+          </h3>
+
+          <div class="preco">
+            ${precoTexto}
+          </div>
+
+          <button
+            class="botao-adicionar"
+            onclick="adicionarProduto('${categoria}',${index})">
+
+            ➕ Adicionar ao pedido
+
+          </button>
+
+        </div>
+
       `;
 
+
       lista.appendChild(div);
+
+    }
+  );
+
+}
+
+
+/* ==========================
+   ADICIONAR
+========================== */
+
+function adicionarProduto(categoria,index){
+
+  const produto =
+    produtos[categoria][index];
+
+
+  const existente =
+    carrinho.find(
+      item =>
+        item.nome === produto.nome
+    );
+
+
+  if(existente){
+
+    existente.quantidade++;
+
+  }else{
+
+    carrinho.push({
+
+      nome:produto.nome,
+
+      preco:produto.preco,
+
+      quantidade:1
 
     });
 
   }
 
 
-  function adicionarProduto(categoria, index) {
+  atualizarCarrinho();
 
-    const produto = produtos[categoria][index];
+}
 
-    const existente = carrinho.find(
-      item => item.nome === produto.nome
+
+/* ==========================
+   AUMENTAR
+========================== */
+
+function aumentar(index){
+
+  carrinho[index].quantidade++;
+
+  atualizarCarrinho();
+
+}
+
+
+/* ==========================
+   DIMINUIR
+========================== */
+
+function diminuir(index){
+
+  carrinho[index].quantidade--;
+
+
+  if(
+    carrinho[index].quantidade <= 0
+  ){
+
+    carrinho.splice(index,1);
+
+  }
+
+
+  atualizarCarrinho();
+
+}
+
+
+/* ==========================
+   REMOVER
+========================== */
+
+function remover(index){
+
+  carrinho.splice(index,1);
+
+  atualizarCarrinho();
+
+}
+
+
+/* ==========================
+   SUBTOTAL
+========================== */
+
+function calcularSubtotal(){
+
+  let subtotal = 0;
+
+
+  carrinho.forEach(item => {
+
+    subtotal +=
+      item.preco *
+      item.quantidade;
+
+  });
+
+
+  return subtotal;
+
+}
+
+
+/* ==========================
+   ATUALIZAR CARRINHO
+========================== */
+
+function atualizarCarrinho(){
+
+  const area =
+    document.getElementById(
+      "itensCarrinho"
     );
 
-    if (existente) {
 
-      existente.quantidade++;
-
-    } else {
-
-      carrinho.push({
-        nome: produto.nome,
-        preco: produto.preco,
-        quantidade: 1
-      });
-
-    }
-
-    atualizarCarrinho();
-
-  }
+  area.innerHTML = "";
 
 
-  function aumentar(index) {
+  if(carrinho.length === 0){
 
-    carrinho[index].quantidade++;
-
-    atualizarCarrinho();
-
-  }
+    area.innerHTML =
+      "Seu carrinho está vazio.";
 
 
-  function diminuir(index) {
+    document.getElementById(
+      "subtotal"
+    ).textContent =
+      "R$ 0,00";
 
-    carrinho[index].quantidade--;
 
-    if (carrinho[index].quantidade <= 0) {
+    document.getElementById(
+      "total"
+    ).textContent =
+      "R$ 0,00";
 
-      carrinho.splice(index, 1);
 
-    }
-
-    atualizarCarrinho();
+    return;
 
   }
 
 
-  function remover(index) {
-
-    carrinho.splice(index, 1);
-
-    atualizarCarrinho();
-
-  }
+  let subtotal = 0;
 
 
-  function atualizarCarrinho() {
+  carrinho.forEach(
+    (item,index) => {
 
-    const area = document.getElementById("itensCarrinho");
-
-    area.innerHTML = "";
-
-    if (carrinho.length === 0) {
-
-      area.innerHTML = "Seu carrinho está vazio.";
-
-      document.getElementById("subtotal").textContent =
-        "R$ 0,00";
-
-      document.getElementById("total").textContent =
-        "R$ 0,00";
-
-      return;
-
-    }
+      subtotal +=
+        item.preco *
+        item.quantidade;
 
 
-    let subtotal = 0;
+      const div =
+        document.createElement("div");
 
 
-    carrinho.forEach((item, index) => {
+      div.className =
+        "item-carrinho";
 
-      subtotal += item.preco * item.quantidade;
-
-
-      const div = document.createElement("div");
-
-      div.className = "item-carrinho";
 
       div.innerHTML = `
 
         <div class="item-info">
 
-          <strong>${item.nome}</strong>
+          <strong>
+            ${item.nome}
+          </strong>
 
-          <span>
-            R$ ${(item.preco * item.quantidade)
+          <span class="item-preco">
+
+            R$
+            ${(item.preco *
+              item.quantidade)
               .toFixed(2)
-              .replace(".", ",")}
+              .replace(".",",")}
+
           </span>
 
         </div>
 
+
         <div class="controles">
 
-          <button onclick="diminuir(${index})">
+          <button
+            onclick="diminuir(${index})">
             −
           </button>
+
 
           <span class="quantidade">
             ${item.quantidade}
           </span>
 
-          <button onclick="aumentar(${index})">
+
+          <button
+            onclick="aumentar(${index})">
             +
           </button>
+
 
           <button
             class="remover"
             onclick="remover(${index})">
+
             🗑️
+
           </button>
 
         </div>
 
       `;
 
+
       area.appendChild(div);
 
-    });
-
-
-    document.getElementById("subtotal").textContent =
-      "R$ " + subtotal.toFixed(2).replace(".", ",");
-
-
-    atualizarTotal();
-
-  }
-
-
-  function alterarTipoPedido() {
-
-    const tipo =
-      document.getElementById("tipoPedido").value;
-
-    const campo =
-      document.getElementById("campoEndereco");
-
-    const linhaTaxa =
-      document.getElementById("linhaTaxa");
-
-
-    if (tipo === "entrega") {
-
-      campo.style.display = "block";
-
-      linhaTaxa.style.display = "flex";
-
-    } else {
-
-      campo.style.display = "none";
-
-      linhaTaxa.style.display = "none";
-
     }
+  );
 
 
-    atualizarTotal();
-
-  }
-
-
-  function calcularSubtotal() {
-
-    let subtotal = 0;
-
-    carrinho.forEach(item => {
-
-      subtotal += item.preco * item.quantidade;
-
-    });
-
-    return subtotal;
-
-  }
+  document.getElementById(
+    "subtotal"
+  ).textContent =
+    "R$ " +
+    subtotal
+      .toFixed(2)
+      .replace(".",",");
 
 
-  function atualizarTotal() {
+  atualizarTotal();
 
-    const subtotal = calcularSubtotal();
-
-    const tipo =
-      document.getElementById("tipoPedido").value;
+}
 
 
-    let taxa = 0;
+/* ==========================
+   TIPO DO PEDIDO
+========================== */
+
+function alterarTipoPedido(){
+
+  const tipo =
+    document.getElementById(
+      "tipoPedido"
+    ).value;
 
 
-    if (tipo === "entrega") {
-
-      taxa = TAXA_ENTREGA;
-
-      document.getElementById("taxaEntrega").textContent =
-        "R$ " + taxa.toFixed(2).replace(".", ",");
-
-    }
+  const campo =
+    document.getElementById(
+      "campoEndereco"
+    );
 
 
-    const total = subtotal + taxa;
+  const linhaTaxa =
+    document.getElementById(
+      "linhaTaxa"
+    );
 
 
-    document.getElementById("total").textContent =
-      "R$ " + total.toFixed(2).replace(".", ",");
+  if(tipo === "entrega"){
 
-  }
-
-
-  function mostrarFormulario() {
-
-    if (carrinho.length === 0) {
-
-      alert("Adicione pelo menos um produto ao pedido.");
-
-      return;
-
-    }
-
-
-    document.getElementById("formulario").style.display =
+    campo.style.display =
       "block";
 
+    linhaTaxa.style.display =
+      "flex";
 
-    document.getElementById("formulario").scrollIntoView({
-      behavior: "smooth"
-    });
+  }else{
 
+    campo.style.display =
+      "none";
 
-    atualizarTotal();
+    linhaTaxa.style.display =
+      "none";
 
   }
 
 
-  function enviarWhatsApp() {
+  atualizarTotal();
 
-    if (carrinho.length === 0) {
-
-      alert("Seu carrinho está vazio.");
-
-      return;
-
-    }
+}
 
 
-    const nome =
-      document.getElementById("nome").value.trim();
+/* ==========================
+   TOTAL
+========================== */
+
+function atualizarTotal(){
+
+  const subtotal =
+    calcularSubtotal();
 
 
-    const tipo =
-      document.getElementById("tipoPedido").value;
+  const tipo =
+    document.getElementById(
+      "tipoPedido"
+    ).value;
 
 
-    const endereco =
-      document.getElementById("endereco").value.trim();
+  let taxa = 0;
 
 
-    const pagamento =
-      document.getElementById("pagamento").value;
+  if(tipo === "entrega"){
+
+    taxa = TAXA_ENTREGA;
 
 
-    if (!nome) {
+    document.getElementById(
+      "taxaEntrega"
+    ).textContent =
+      "R$ " +
+      taxa
+        .toFixed(2)
+        .replace(".",",");
 
-      alert("Digite seu nome.");
-
-      return;
-
-    }
-
-
-    if (
-      tipo === "entrega" &&
-      !endereco
-    ) {
-
-      alert("Digite o endereço de entrega.");
-
-      return;
-
-    }
+  }
 
 
-    const subtotal = calcularSubtotal();
+  const total =
+    subtotal + taxa;
 
 
-    const taxa =
+  document.getElementById(
+    "total"
+  ).textContent =
+    "R$ " +
+    total
+      .toFixed(2)
+      .replace(".",",");
+
+}
+
+
+/* ==========================
+   FORMULÁRIO
+========================== */
+
+function mostrarFormulario(){
+
+  if(carrinho.length === 0){
+
+    alert(
+      "Adicione pelo menos um produto ao pedido."
+    );
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "formulario"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "formulario"
+  ).scrollIntoView({
+    behavior:"smooth"
+  });
+
+
+  atualizarTotal();
+
+}
+
+
+/* ==========================
+   ENVIAR WHATSAPP
+========================== */
+
+function enviarWhatsApp(){
+
+  if(carrinho.length === 0){
+
+    alert(
+      "Seu carrinho está vazio."
+    );
+
+    return;
+
+  }
+
+
+  const nome =
+    document.getElementById(
+      "nome"
+    ).value.trim();
+
+
+  const tipo =
+    document.getElementById(
+      "tipoPedido"
+    ).value;
+
+
+  const endereco =
+    document.getElementById(
+      "endereco"
+    ).value.trim();
+
+
+  const pagamento =
+    document.getElementById(
+      "pagamento"
+    ).value;
+
+
+  const observacao =
+    document.getElementById(
+      "observacao"
+    ).value.trim();
+
+
+  if(!nome){
+
+    alert(
+      "Digite seu nome."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    tipo === "entrega" &&
+    !endereco
+  ){
+
+    alert(
+      "Digite o endereço de entrega."
+    );
+
+    return;
+
+  }
+
+
+  const subtotal =
+    calcularSubtotal();
+
+
+  const taxa =
+    tipo === "entrega"
+    ? TAXA_ENTREGA
+    : 0;
+
+
+  const total =
+    subtotal + taxa;
+
+
+  let mensagem =
+    "🛍️ *NOVO PEDIDO - HOUSE*\\n\\n";
+
+
+  mensagem +=
+    "👤 *Cliente:* " +
+    nome +
+    "\\n";
+
+
+  mensagem +=
+    "📦 *Tipo:* " +
+    (
       tipo === "entrega"
-      ? TAXA_ENTREGA
-      : 0;
+      ? "Entrega"
+      : "Retirada no estabelecimento"
+    ) +
+    "\\n";
 
 
-    const total =
-      subtotal + taxa;
-
-
-    let mensagem =
-      "🛍️ *NOVO PEDIDO - HOUSE*\\n\\n";
-
+  if(tipo === "entrega"){
 
     mensagem +=
-      "👤 *Cliente:* " + nome + "\\n";
-
-
-    mensagem +=
-      "📦 *Tipo:* " +
-      (
-        tipo === "entrega"
-        ? "Entrega"
-        : "Retirada no estabelecimento"
-      ) +
+      "📍 *Endereço:* " +
+      endereco +
       "\\n";
 
-
-    if (tipo === "entrega") {
-
-      mensagem +=
-        "📍 *Endereço:* " +
-        endereco +
-        "\\n";
-
-    }
+  }
 
 
-    mensagem +=
-      "💳 *Pagamento:* " +
-      pagamento +
-      "\\n\\n";
+  mensagem +=
+    "💳 *Pagamento:* " +
+    pagamento +
+    "\\n\\n";
 
 
-    mensagem +=
-      "🛒 *ITENS DO PEDIDO:*\\n";
+  mensagem +=
+    "🛒 *ITENS DO PEDIDO:*\\n";
 
 
-    carrinho.forEach(item => {
+  carrinho.forEach(item => {
 
-      const valor =
-        item.preco * item.quantidade;
-
-
-      mensagem +=
-        "• " +
-        item.quantidade +
-        "x " +
-        item.nome +
-        " - R$ " +
-        valor.toFixed(2).replace(".", ",") +
-        "\\n";
-
-    });
+    const valor =
+      item.preco *
+      item.quantidade;
 
 
     mensagem +=
-      "\\n💰 *Subtotal:* R$ " +
-      subtotal.toFixed(2).replace(".", ",");
+      "• " +
+      item.quantidade +
+      "x " +
+      item.nome +
+      " - R$ " +
+      valor
+        .toFixed(2)
+        .replace(".",",") +
+      "\\n";
+
+  });
 
 
-    if (tipo === "entrega") {
+  mensagem +=
+    "\\n💰 *Subtotal:* R$ " +
+    subtotal
+      .toFixed(2)
+      .replace(".",",");
 
-      mensagem +=
-        "\\n🛵 *Taxa de entrega:* R$ " +
-        taxa.toFixed(2).replace(".", ",");
 
-    }
-
+  if(tipo === "entrega"){
 
     mensagem +=
-      "\\n💵 *TOTAL:* R$ " +
-      total.toFixed(2).replace(".", ",");
-
-
-    const url =
-      "https://wa.me/" +
-      WHATSAPP +
-      "?text=" +
-      encodeURIComponent(mensagem);
-
-
-    window.open(url, "_blank");
+      "\\n🛵 *Taxa de entrega:* R$ " +
+      taxa
+        .toFixed(2)
+        .replace(".",",");
 
   }
 
 
-  // Abre Pastéis automaticamente
-  mostrarCategoria(
-    "pasteis",
-    document.querySelector(".categorias button")
+  mensagem +=
+    "\\n💵 *TOTAL:* R$ " +
+    total
+      .toFixed(2)
+      .replace(".",",");
+
+
+  if(observacao){
+
+    mensagem +=
+      "\\n\\n📝 *Observação:* " +
+      observacao;
+
+  }
+
+
+  const url =
+    "https://wa.me/" +
+    WHATSAPP +
+    "?text=" +
+    encodeURIComponent(
+      mensagem
+    );
+
+
+  window.open(
+    url,
+    "_blank"
   );
+
+}
+
+
+/* ==========================
+   ABRIR PASTÉIS
+========================== */
+
+mostrarCategoria(
+  "pasteis",
+  document.querySelector(
+    ".categorias button"
+  )
+);
 
 </script>
 
