@@ -534,7 +534,19 @@ const TAXA_ENTREGA = 5.00;
 ========================== */
 
 const produtos = {
-
+hamburguer: [
+  {
+    grupo: "X-Salada Tradicional",
+    nome: "X-Salada Tradicional",
+    preco: 0
+  },
+  {
+    grupo: "Hambúrguer Artesanal",
+    nome: "Hambúrguer Artesanal",
+    preco: 0
+  }
+],
+],
   pasteis: [
 
     {
@@ -732,7 +744,23 @@ function mostrarCategoria(categoria, botao){
 
   produtos[categoria].forEach(
     (produto,index) => {
+let ultimoGrupo = "";
 
+produtos[categoria].forEach(
+  (produto, index) => {
+
+    if(categoria === "hamburguer" && produto.grupo !== ultimoGrupo){
+
+  const tituloGrupo = document.createElement("h2");
+
+  tituloGrupo.className = "titulo-grupo";
+
+  tituloGrupo.textContent = produto.grupo;
+
+  lista.appendChild(tituloGrupo);
+
+  ultimoGrupo = produto.grupo;
+}
       const div =
         document.createElement("div");
 
