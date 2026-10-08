@@ -794,11 +794,7 @@ if (produto.preco === -1) {
         document.createElement("div");
 
       div.className = "produto";
-if (produto.descricao) {
-  const descricao = document.createElement("p");
-  descricao.textContent = produto.descricao;
-  div.appendChild(descricao);
-}
+
 
       let precoTexto =
         produto.preco === 0
@@ -832,11 +828,13 @@ if (produto.descricao) {
 
         <div class="info-produto">
 
-          <h3>
-            ${produto.nome}
-          </h3>
+         <h3>
+  ${produto.nome}
+</h3>
 
-          <div class="preco">
+${produto.descricao ? `<p class="descricao">${produto.descricao}</p>` : ""}
+
+<div class="preco">
             ${precoTexto}
           </div>
 
