@@ -783,7 +783,12 @@ function mostrarCategoria(categoria, botao){
 
   produtos[categoria].forEach(
     (produto,index) => {
-
+if (produto.preco === -1) {
+  const titulo = document.createElement("h3");
+  titulo.textContent = produto.nome;
+  lista.appendChild(titulo);
+  return;
+}
       const div =
         document.createElement("div");
 
