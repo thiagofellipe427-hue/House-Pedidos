@@ -794,7 +794,11 @@ if (produto.preco === -1) {
         document.createElement("div");
 
       div.className = "produto";
-
+if (produto.descricao) {
+  const descricao = document.createElement("p");
+  descricao.textContent = produto.descricao;
+  div.appendChild(descricao);
+}
 
       let precoTexto =
         produto.preco === 0
