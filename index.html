@@ -311,11 +311,18 @@ footer{
 <div class="container">
 
   <div class="categorias">
-<button
-  type="button"
-  onclick="mostrarCategoria('hamburguer', this)">
-  🍔 Hambúrguer
-</button>
+    <button
+      type="button"
+      onclick="mostrarCategoria('hamburguer', this)">
+      🍔 Hambúrguer
+    </button>
+
+    <button
+      type="button"
+      onclick="mostrarCategoria('combos', this)">
+      🍔 Combos
+    </button>
+<button type="button" onclick="mostrarCategoria('batata', this)"> 🍟 Batata Frita </button>
     <button
       class="ativo"
       onclick="mostrarCategoria('pasteis', this)">
@@ -331,9 +338,7 @@ footer{
       onclick="mostrarCategoria('bebidas', this)">
       🥤 Bebidas
     </button>
-
   </div>
-
 
   <div id="produtos"></div>
 
@@ -593,9 +598,73 @@ descricao: "2 hambúrgueres artesanais, queijo, alface, tomate e molho especial.
   nome: "House Completo",
 preco: 0,
 descricao: "Hambúrguer artesanal, queijo, bacon, ovo, alface, tomate e molho especial."
+   }
+
+],
+
+combos: [
+  {
+    nome: "Combo House",
+    preco: 0,
+    descricao: "1 hambúrguer à escolha, batata frita e 1 refrigerante."
+  },
+  {
+    nome: "Combo Duplo",
+    preco: 0,
+    descricao: "2 hambúrgueres à escolha, batata frita e 2 refrigerantes."
+  },
+  {
+    nome: "Combo Casal",
+    preco: 0,
+    descricao: "2 hambúrgueres à escolha, 2 batatas fritas e 2 refrigerantes."
+  },
+  {
+    nome: "Combo Família",
+    preco: 0,
+    descricao: "4 hambúrgueres à escolha, batata frita grande e refrigerante de 2 litros."
   }
 
 ],
+
+batata: [
+  {
+    nome: "Batata Frita Pequena",
+    preco: 0,
+    descricao: "Porção pequena de batata frita.",
+    adicionais: [
+      "Cheddar",
+      "Bacon",
+      "Catupiry",
+      "Queijo mussarela",
+      "Calabresa"
+    ]
+  },
+  {
+    nome: "Batata Frita Média",
+    preco: 0,
+    descricao: "Porção média de batata frita.",
+    adicionais: [
+      "Cheddar",
+      "Bacon",
+      "Catupiry",
+      "Queijo mussarela",
+      "Calabresa"
+    ]
+  },
+  {
+    nome: "Batata Frita Grande",
+    preco: 0,
+    descricao: "Porção grande de batata frita.",
+    adicionais: [
+      "Cheddar",
+      "Bacon",
+      "Catupiry",
+      "Queijo mussarela",
+      "Calabresa"
+    ]
+  }
+],
+
   pasteis: [
 
     {
@@ -814,19 +883,27 @@ if (produto.preco === -1) {
           .replace(".",",");
 
 
-      let emoji = "🍽️";
+     let emoji = "🍽️";
 
-      if(categoria === "pasteis"){
-        emoji = "🥟";
-      }
+if(categoria === "pasteis"){
+  emoji = "🥟";
+}
 
-      if(categoria === "acai"){
-        emoji = "🍇";
-      }
+if(categoria === "acai"){
+  emoji = "🍇";
+}
 
-      if(categoria === "bebidas"){
-        emoji = "🥤";
-      }
+if(categoria === "bebidas"){
+  emoji = "🥤";
+}
+
+if(categoria === "combos"){
+  emoji = "🍔";
+}
+
+if(categoria === "batata"){
+  emoji = "🍟";
+}
 
 
       div.innerHTML = `
@@ -842,7 +919,17 @@ if (produto.preco === -1) {
 </h3>
 
 ${produto.descricao ? `<p class="descricao">${produto.descricao}</p>` : ""}
-
+${produto.adicionais ? `
+  <label for="adicional-${categoria}-${index}">
+    Escolha 1 adicional (opcional):
+  </label>
+  <select id="adicional-${categoria}-${index}">
+    <option value="">Sem adicional</option>
+    ${produto.adicionais.map(adicional =>
+      `<option value="${adicional}">${adicional}</option>`
+    ).join("")}
+  </select>
+` : ""}
 <div class="preco">
             ${precoTexto}
           </div>
@@ -869,50 +956,43 @@ ${produto.descricao ? `<p class="descricao">${produto.descricao}</p>` : ""}
 
 
 /* ==========================
-   ADICIONAR
-========================== */
-
 function adicionarProduto(categoria,index){
 
-  const produto =
-    produtos[categoria][index];
+  const produto = produtos[categoria][index];
 
+  let adicionalEscolhido = "";
 
-  const existente =
-    carrinho.find(
-      item =>
-        item.nome === produto.nome
+  if (produto.adicionais) {
+    const seletor = document.getElementById(
+      `adicional-${categoria}-${index}`
     );
 
-
-  if(existente){
-
-    existente.quantidade++;
-
-  }else{
-
-    carrinho.push({
-
-      nome:produto.nome,
-
-      preco:produto.preco,
-
-      quantidade:1
-
-    });
-
+    adicionalEscolhido = seletor ? seletor.value : "";
   }
 
+  const nomeCompleto = adicionalEscolhido
+    ? `${produto.nome} (Adicional: ${adicionalEscolhido})`
+    : produto.nome;
 
-  atualizarCarrinho();
+  const existente = carrinho.find(
+    item => item.nome === nomeCompleto
+  );
+
+  if (existente) {
+    existente.quantidade++;
+  } else {
+    carrinho.push({
+      nome: nomeCompleto,
+      preco: produto.preco,
+      quantidade: 1
+    });
+  }
+
+ atualizarCarrinho();
 
 }
 
-
-/* ==========================
-   AUMENTAR
-========================== */
-
+/* ========================== */
 function aumentar(index){
 
   carrinho[index].quantidade++;
